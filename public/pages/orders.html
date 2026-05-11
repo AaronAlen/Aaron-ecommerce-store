@@ -174,7 +174,7 @@
     
     async function oders(){
             if(!localStorage.getItem("token")) return alert("no token")
-            const res = await fetch(`http://${window.location.hostname}:3000/product/goToOrders`,{
+            const res = await fetch(`/product/goToOrders`,{
                 method : "GET",
                 headers : {
                     "Content-Type" : "application/json",

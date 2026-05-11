@@ -179,7 +179,7 @@
 
 
         async function fetching() {
-            let data = await fetch(`http://${window.location.hostname}:3000/product/findOne/${id}`)
+            let data = await fetch(`/product/findOne/${id}`)
             let rslts = await data.json()
             let rslt = rslts.data[0]
             console.log(rslt);
@@ -205,7 +205,7 @@
         async function cart(id){
             if(!localStorage.getItem("token")) return alert("login first")
             console.log("id",id);
-            const res = await fetch(`http://${window.location.hostname}:3000/product/addToCart/${id}`,{
+            const res = await fetch(`/product/addToCart/${id}`,{
                 method : "post",
                 headers : {
                     "content-type" : "application/json",

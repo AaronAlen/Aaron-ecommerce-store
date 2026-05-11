@@ -182,7 +182,7 @@
     
     async function goToCart(){
             if(!localStorage.getItem("token")) return alert("no token")
-            const res = await fetch(`http://${window.location.hostname}:3000/product/goToCart`,{
+            const res = await fetch(`/product/goToCart`,{
                 method : "GET",
                 headers : {
                     "Content-Type" : "application/json",
@@ -264,7 +264,7 @@
         async function save(){
             let details = data.map(product => {return {productId : product._id, count : product.count}})
             console.log(details);
-            const res = await fetch(`http://${window.location.hostname}:3000/product/saveProducts`,{
+            const res = await fetch(`/product/saveProducts`,{
                 method : "post",
                 headers : {
                     "content-type" : "application/json",

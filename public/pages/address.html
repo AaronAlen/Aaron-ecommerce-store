@@ -222,7 +222,7 @@
         let title = localStorage.getItem("title")
         console.log(productId,count);
 
-        let res = await fetch(`http://${window.location.hostname}:3000/product/orderConfirmed`,{
+        let res = await fetch(`/product/orderConfirmed`,{
             method : "post",
             headers : {
                 "content-type" : "application/json",

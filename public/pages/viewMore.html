@@ -138,7 +138,7 @@
         category = category.split(",")
         console.log(typeof(category),category);
         console.log(category);
-        let data = await fetch(`http://${window.location.hostname}:3000/product/findSome`,{
+        let data = await fetch(`/product/findSome`,{
           method : "post",
           headers : {
             "content-type" : "application/json"

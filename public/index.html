@@ -155,7 +155,7 @@
           let loadingTurn = 1
 
       async function fetchdata() {
-        let response = await fetch(`http://${window.location.hostname}:3000/product/find`);
+        let response = await fetch(`/product/find`);
         let products = await response.json();
         display(products.data,1)
 
