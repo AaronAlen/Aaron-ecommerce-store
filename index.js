@@ -7,7 +7,7 @@ const dotenv = require("dotenv")
 const dns = require("dns")
 const db = require("./src/config/db")
 const cors = require("cors")
-const ogProducts = require("../products/src/schema/ogProducts")
+const ogProducts = require("./src/schema/ogProducts")
 dotenv.config()
 
 const router = require("./src/routes/routes")
