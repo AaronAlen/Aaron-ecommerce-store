@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/index.css">
+    <style>
+        *{
+            margin: 0%;
+            padding: 0%;
+            background-color: transparent;
+        }
+         #product, #subProduct, #cartTitle, #subCartTitle ,#checkoutDiv{
+            width: 90%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        #product{
+            margin-bottom: 5%;
+        }
+        #subProduct, #headingPrice{
+            width: 100px;
+        }
+
+        #imgP{
+            /* background-color: black; */
+            width: 100px;
+            height: 100px;
+            border-radius:20px;
+            box-shadow: 5px 5px 10px rgb(201, 200, 200);
+        }
+        #product button{
+            margin-bottom: 1%; 
+            padding: 1%;
+            background-color: red;
+        }
+        #homeProductDiv{
+            width: 80%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: space-around; */
+            align-items: center;
+            border-radius: 50px;
+            background-color: white;
+            width: 90%; height:auto;
+            box-shadow: 0px 0px 25px gray;
+            gap: 50px;
+        }
+        #productDiv{
+            width: 90%;
+            height: auto;
+        }
+        #total{
+            display: flex;
+            flex-direction: column;     
+            align-items: center;   
+            background-color: transparent;
+        }
+        #total p{
+            background-color: transparent;
+        }
+        /* span{
+            text-decoration: ;
+        } */
+
+        /* #btn1{
+            background-color: green;
+        } */
+         #btn{
+            height: 60%;
+
+         }
+    
+    @media (max-width:420px){
+        #inside{
+            width: 100% !important;
+            padding: 0% !important;
+            height: auto !important;
+            /* display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important; */
+        }
+        #homeProductDiv{
+            margin-top: 5%;
+            margin-bottom: 5%;
+            width: 95%;
+        }
+        #product{
+            position: relative;
+            height: 100px;
+            margin-bottom: 10%;
+        }
+        #imgP{
+            position: absolute !important;
+            top: 0% !important;
+            left: 0% !important;            
+        }        
+        #headingPrice{
+            position: absolute !important;
+            top: 15% !important;
+            left: 40% !important;            
+        }
+        #subProduct{
+            position: absolute !important;
+            top: 20% !important;
+            left: 90% !important;   
+            width: 32px !important; 
+        }       
+        #subProduct img, #subProduct h3{
+            padding-left: 0px !important;
+        }
+        #totalPrice{
+            position: absolute !important;
+            top: 230% !important;
+            left: -490% !important;            
+        } 
+        .add{
+            margin-left: 30%;
+        }
+        .dlt{
+            position: absolute;
+            top: 65% !important;
+            left: 90% !important;
+            height: 25% !important;
+            width: 20% !important;
+        }
+        #totalCost{
+            padding-left: 10% !important;
+            text-align: start !important;
+        }
+        #checkoutDiv{
+            display: flex !important;
+            /* flex-direction: column !important; */
+            align-items: center !important;
+            /* text-align: center; */
+            padding: 5%;
+            height: 5vh !important;
+            margin-bottom: 5% !important;
+            /* height: 7vh !important; */
+        }
+        #checkoutDiv button{
+            width: 30% !important;
+            height: 90% !important;
+            font-size: 15px !important;
+            margin-bottom: 0% !important;
+            /* padding: 2% !important; */
+            /* gap: 2px!important; */
+        }
+
+    }
+
+    </style>
+</head>
+<body style="overflow-x: hidden;">
+    <div id="inside" style="height: auto; display: flex; justify-content: center; align-items: center; padding: 5%;">
+        
+            <div id="homeProductDiv">
+                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Cart</b><img src="../images/trolley.png" width="30px" alt=""></div></div>
+
+                <div id="productDiv">
+                </div>  
+
+                <div id="total" style=" width: 90%; height: auto;">
+
+            </div>
+        </div>
+        
+        
+    </div>
+</body>
+<script>
+    
+    const div = document.getElementById("productDiv")
+    const total = document.getElementById("total")
+    
+    let data;
+    
+    
+    async function goToCart(){
+            if(!localStorage.getItem("token")) return alert("no token")
+            const res = await fetch(`http://${window.location.hostname}:3000/product/goToCart`,{
+                method : "GET",
+                headers : {
+                    "Content-Type" : "application/json",
+                    "Authorization" : `Bearer ${localStorage.getItem ("token")}`
+                }
+            })
+            const response = await res.json()
+            data = await response.data
+            let count = await response.count
+            data.forEach((product,index)=>product.count = count[index])
+        
+            display(data)
+        }
+
+
+        goToCart().then(()=>console.log(data))
+
+
+        function checkout(){
+            window.location.href = "address.html"
+        }
+
+        function dlt(index){
+            data.splice(index,1)
+            div.innerHTML =""
+            display(data)
+        }
+
+        function display(products){
+            let totalPrice = 0
+            products.forEach((product, index) => {
+                div.innerHTML += `
+                <div id="product" style="display: flex;">
+                    <img id="imgP" src=${product.images[0]} width="100px" alt="">
+                    <div id="headingPrice" "width: 150px">
+                        <h6 >${product.title}</h6>
+                        <h3 >${product.price}</h3>
+                    </div>
+                    <div id="subProduct">
+                        <img src="../images/add.png" onclick ="add(${index})" width="20px"  height="20px"  alt=""style="padding-left:10px">
+                        <h3 class="add" style="padding-left:10px">${product.count}</h3>
+                        <img class="add" src="../images/remove.png" onclick ="sub(${index})" width="20px"  height="20px" alt="" style="padding-left:10px"> 
+                        <h3 id="totalPrice" style="padding-left:20px">${(product.price*product.count).toFixed(2)}</h3>                   
+                    </div>
+                    <button id="btn" class="dlt" onclick = "dlt(${index})" >delete</button>                
+                </div>`
+                totalPrice += product.price * product.count
+            })
+
+            total.innerHTML = `
+                <div id="totalCost" style="width: 100%; padding-left: 30%; background-color: transparent;">
+                    <p>Subtotal : <b>${totalPrice.toFixed(2)}</b></p>
+                    <p>your order eligible for free delivery</p>
+                </div>
+                <div id="checkoutDiv" style="height:auto; margin: 2%; display: flex; justify-content: center; align-items: center; gap: 20%;">
+                    <button id="btn" onclick="save()" style="margin-bottom: 5%; margin-top: 5%; background-color: green; width: 20%;">save</button>
+                    <button id="btn" onclick="checkout()" style="margin-bottom: 5%; margin-top: 5%; width: 20%;">checkout</button>
+                </div>
+
+            `
+        }
+
+        function add(index){
+            data[index].count +=1 
+            console.log(data[index].count);
+
+            div.innerHTML = ""
+            display(data)
+            
+        }
+        function sub(index){
+            if(data[index].count >= 1)data[index].count -=1 
+            console.log(data[index].count);
+
+            div.innerHTML = ""
+            display(data)
+        }
+
+        async function save(){
+            let details = data.map(product => {return {productId : product._id, count : product.count}})
+            console.log(details);
+            const res = await fetch(`http://${window.location.hostname}:3000/product/saveProducts`,{
+                method : "post",
+                headers : {
+                    "content-type" : "application/json",
+                    "Authorization" : `Bearer ${localStorage.getItem("token")}`
+                },
+                body : JSON.stringify({details})
+            })
+
+            if(res.ok)alert("cart saved successfully")
+        }
+
+
+
+</script>
+</html>

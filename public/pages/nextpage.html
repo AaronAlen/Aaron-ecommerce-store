@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        *{
+            margin: 0%;
+            padding: 0%;
+            background-color: white;
+        }
+
+        #btnl{
+            position: fixed;
+            top: 2%;
+            right: 80px;
+            z-index: 3;
+        }
+
+        #btnc{
+            position: fixed;
+            top: 2%;
+            right: 30px;
+            z-index: 3;
+        }
+
+        #div0{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #inside{
+            width: 60%;
+            height: 70%;
+            background-color: white;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 5px 5px 10px rgb(172, 172, 172);
+            
+
+        }
+        .parts{
+            background-color: white;
+            width: 40%;
+        }
+        #inside div img{
+            width: 300px;
+            height: 300px;
+            color: white;
+            border-radius: 20px;
+            background-color: white;
+        }
+        #inside div h2,p,h1{
+            color: black;
+            background-color: white;
+            margin-top: 10%;
+        }
+        .btns{
+            width: 80%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 10%;
+            gap: 10px;
+            background-color: white;
+        }
+        #btn1, #btn2{
+            flex: 1;
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 4%;
+        }
+        #btn2{
+            background-color: green;
+        }
+        
+        @media (min-width:0px) and (max-width:420px){
+            #div0{
+                height: auto;
+            }
+            #btnl{
+                right: 20%;
+            }
+            #btnc{
+                position: fixed;
+                right: 10%;
+            }
+            #inside{
+                display: block;
+                height: auto;
+                width: 85%;
+                box-shadow: 0px 0px 10px rgb(148, 147, 147);
+                margin-top: 20%;
+            }
+            #part1{
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            .parts{
+                text-align: center;
+                width: 100%;
+                background-color: transparent;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .parts h2,p{
+                width: 80%;
+            }
+            #inside div img{
+                width: 200px;
+                height: auto;
+                background-color: transparent;
+            }
+            
+            .btns{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                background-color: transparent;
+                margin-bottom: 5%;
+                gap: 10%;
+            }
+            .btns button{
+                box-shadow: 5px 5px 10px rgb(161, 161, 161);
+                margin-bottom: 5% !important;
+                font-size: 15px;
+                padding: 5% !important;
+                padding-left: 20% !important;
+                padding-right: 20% !important;
+
+            }
+            #btnO{
+            top: 1% !important;
+            left: 70% !important;
+            }
+            #btnc{
+            top: 1% !important;
+            left: 80% !important;
+            }
+            #btnl{
+            top: 1% !important;
+            left: 90% !important;
+            }            
+        }
+
+    </style>
+</head>
+<body>
+
+  <img src="../images/tracking.png"  width="30px" id="btnO" onclick="orders()" style="background-color: transparent; position: fixed; top: 2%; left: 75%; z-index: 3;"></img>
+  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="goToCart()" style="background-color: transparent; position: fixed; left: 80%;"></img>
+  <img src="../images/user (2).png"  width="30px" id="btnl" onclick="login()" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
+
+
+     <div id="div0">
+        <div id="inside">
+
+
+        </div>
+     </div>
+    <script>
+
+        let id = parseInt(localStorage.getItem('id'))
+        let inside = document.getElementById("inside")
+        let img
+        let title
+
+
+        async function fetching() {
+            let data = await fetch(`http://${window.location.hostname}:3000/product/findOne/${id}`)
+            let rslts = await data.json()
+            let rslt = rslts.data[0]
+            console.log(rslt);
+
+            inside.innerHTML = `
+                                <div class = "parts" id="part1"><img src="${rslt.images[0]}" alt=""></div>
+                                <div class =" parts">
+                                    <h2>${rslt.title}</h2>
+                                    <p>${rslt.description}</p>
+                                    <h1>${rslt.price}</h1>
+                                    <div class = "btns">
+                                        <button id = "btn1" onclick = "address('${rslt._id}')">Buy Now</button>
+                                        <button id = "btn2" onclick = "cart('${rslt._id}')">Add to Cart</button>
+                                    </div>
+                                </div>
+                                `
+                                img = rslt.images[0]
+                                title = rslt.title
+                                console.log(rslt._id);
+        }
+        fetching()
+
+        async function cart(id){
+            if(!localStorage.getItem("token")) return alert("login first")
+            console.log("id",id);
+            const res = await fetch(`http://${window.location.hostname}:3000/product/addToCart/${id}`,{
+                method : "post",
+                headers : {
+                    "content-type" : "application/json",
+                    "authorization" : `bearer ${localStorage.getItem("token")}`
+                }
+            })
+            let message = await res.json()
+            if(res.ok){alert(message.message);goToCart();}
+
+            console.log(message);
+        }
+
+        async function goToCart(){
+            window.location.href = "cart.html"
+        }
+
+        async function login(){
+            window.location.href = "login.html"
+        }     
+        
+        async function address(id){
+            let count = 1
+            if(!localStorage.getItem("token")) return alert("login first")    
+            console.log("id",id);
+            localStorage.setItem("orderId", id)    
+            localStorage.setItem("count", count)                    
+            localStorage.setItem("img", img)                    
+            localStorage.setItem("title", title)                    
+            window.location.href = "address.html"
+        }     
+        async function orders(){
+        window.location.href = "orders.html"
+        }        
+    </script>
+</body>
+</html>

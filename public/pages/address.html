@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/index.css">
+    <style>
+        
+        #address{
+            height: 5%;
+            padding: 5%;
+        }
+        #details{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 30vh;
+        }
+        #fields{
+            width: 100%;
+            height: 50%;
+            display: flex;
+            /* justify-content: space-evenly; */
+            padding-left: 20%;   
+            padding-right: 20%; 
+            gap: 10%;  
+            
+        }
+        #details1{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            height: 10vh;   
+            padding-left: 10%;   
+            padding-right: 10%;   
+            gap: 0px;   
+        }
+        #fields1{
+            width: 50%;
+            height: 80%;
+            display: flex;
+            justify-content: space-evenly;
+            gap: 10px;
+        }
+        #label{
+            width: 100px;
+        }
+        .input1{
+            height: 60%;
+        }
+        *{
+            background-color: transparent;
+        }
+        .input, .input1{
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #address{
+            font-weight: bold;
+        }
+        .input1{
+            width: 150px;
+        }
+        #btn{
+            margin-bottom: 3%;
+            margin-top: 3%;
+        }
+        
+        @media (max-width:420px) {
+            #div0{
+                height: 90vh !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+            /* #home{
+                margin-top: 25%;
+            } */
+            #details{
+                display: block;
+                height: 32vh !important;
+                /* text-align: center; */
+                overflow-x: hidden;
+            }
+            #details1{
+                margin-top: 0%;
+                display: block;
+                height: 20vh !important;
+                padding-left: 0%;   
+                padding-right: 0%;   
+            }
+            #fields, #fields1{
+                height: 14%;
+                margin-top: 2%;
+                /* width: 100% !important; */
+                padding-left: 7% !important;
+                text-align: start !important;
+            }  
+            #fields1{
+                height: 20% !important;
+                width: 100% !important;
+                padding-left: 0% !important;                
+            }
+            #fields label, #fields1 label{
+                width: 70px !important;
+            } 
+            #fields input, #fields1 input{
+                width: 200px !important;
+                border-radius: 10px;                
+            } 
+           #fields1 label{
+                margin-left: 1% !important;                
+            }            
+            #fields1 input{
+                margin-left: 1% !important;                
+            }
+            .input1{
+                height: 100% !important;
+            }            
+            /* body{
+                overflow: hidden;
+            } */
+            #btn{
+                margin-top: 10%;
+            }
+            #btnO{
+            top: 1% !important;
+            left: 70% !important;
+            }
+            #btnc{
+            top: 1% !important;
+            left: 80% !important;
+            }
+            #btnl{
+            top: 1% !important;
+            left: 90% !important;
+            }      
+        }
+    </style>
+</head>
+<body >
+    <!-- style="overflow-x: hidden;" -->
+  <img src="../images/tracking.png"  width="30px" id="btnO" onclick="orders()" style="background-color: transparent; position: fixed; top: 2%; left: 75%; z-index: 3;"></img>
+  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="goToCart()" style="background-color: transparent; position: fixed; left: 80%;"></img>
+  <img src="../images/user (2).png"  width="30px" id="btnl" onclick="login()" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
+     
+         <div id="div0" style="height: auto; width: 100%; display: flex; justify-content: center; align-items: center;">
+        <div id="home" style="margin-top:5%; overflow-x: hidden; width: 90%; text-align: center; border-radius: 50px; background-color: rgb(236, 235, 235); width: 90%; height: 80%; box-shadow: 0px 0px 25px gray;">
+            <div id="address">Address</div>
+            <div id="details">
+                <div id="fields"><label for="" id="label">name</label><input type="text" class="input" id="name" value=""></div>
+                <div id="fields"><label for="" id="label">email</label><input type="text" class="input" id="email" value="" ></div>
+                <div id="fields"><label for="" id="label">phone</label><input type="text" class="input" id="phone" value=""></div>
+                <div id="fields"><label for="" id="label">area</label><input type="text" class="input" id="area" value=""></div>
+                <div id="fields"><label for="" id="label">building</label><input type="text" class="input" id="house" value=""></div>
+                <div id="fields"><label for="" id="label">landmark</label><input type="text" class="input" id="landmark" value=""></div>
+            </div>
+            <div id="details1">
+                <div id="fields1"><label for="" id="label">nation</label><input type="text" class="input1" id="nation" value=""></div>
+                <div id="fields1"><label for="" id="label">state</label><input type="text" class="input1" id="state" value=""></div>
+                <div id="fields1"><label for="" id="label">city</label><input type="text" class="input1" id="city" value=""></div>
+                <div id="fields1"><label for="" id="label">pincode</label><input type="text" class="input1" id="pincode" value=""></div>
+            </div>
+            <button id="btn"  onclick = "confirmed()" >continue</button>
+        </div>
+
+
+</body>
+<script>
+    function getAddress(){
+            navigator.geolocation.getCurrentPosition(async(position) => {
+
+            const lat = position.coords.latitude
+            const lon = position.coords.longitude
+
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+
+            const data = await res.json()
+
+            console.log(data.address)
+
+            const home = document.getElementById("home")
+
+            home.innerHTML = `
+            <div id="address">Address</div>
+            <div id="details">
+                <div id="fields"><label for="" id="label">name</label><input type="text" class="input" id="name" value=""></div>
+                <div id="fields"><label for="" id="label">house,building</label><input type="text" class="input" id="house" value="${data.address.neighbourhood}"></div>
+                <div id="fields"><label for="" id="label">phone</label><input type="text" class="input" id="phone"></div>
+                <div id="fields"><label for="" id="label">area</label><input type="text" class="input" id="area" value="${data.address.suburb}"></div>
+                <div id="fields"><label for="" id="label">email</label><input type="text" class="input" id="email" ></div>
+                <div id="fields"><label for="" id="label">landmark</label><input type="text" class="input" id="landmark" value="${data.address.road}"></div>
+            </div>
+            <div id="details1">
+                <div id="fields1"><label for="" id="label">nation</label><input type="text" class="input1" id="nation" value="${data.address.country}"></div>
+                <div id="fields1"><label for="" id="label">state</label><input type="text" class="input1" id="state" value="${data.address.state}"></div>
+                <div id="fields1"><label for="" id="label">city</label><input type="text" class="input1" id="city" value="${data.address.city}"></div>
+                <div id="fields1"><label for="" id="label">pincode</label><input type="text" class="input1" id="pincode" value="${data.address.postcode}"></div>
+            </div>
+            <button id="btn" onclick = "confirmed()">continue</button>
+
+            `
+
+        })        
+    }
+
+    getAddress()
+
+    async function confirmed(){
+        let name = document.getElementById("name").value
+        let email = document.getElementById("email").value
+        let phone = document.getElementById("phone").value
+        let building = document.getElementById("house").value
+        let area = document.getElementById("landmark").value
+        let city = document.getElementById("city").value
+        let state = document.getElementById("state").value
+        let pincode = document.getElementById("pincode").value
+
+        let productId = localStorage.getItem("orderId")
+        let count = localStorage.getItem("count")
+        let img = localStorage.getItem("img")
+        let title = localStorage.getItem("title")
+        console.log(productId,count);
+
+        let res = await fetch(`http://${window.location.hostname}:3000/product/orderConfirmed`,{
+            method : "post",
+            headers : {
+                "content-type" : "application/json",
+                "authorization" : `bearer ${localStorage.getItem("token")}`
+            },
+            body : JSON.stringify({productId,count,img,title,address : {
+                name,email,phone,building,area,city,state,pincode
+            }})
+        })
+        if(res.ok)window.location.href ="confirmed.html"
+    }
+
+    async function goToCart(){
+        window.location.href = "cart.html"
+    }
+
+    async function orders(){
+    window.location.href = "orders.html"
+    }     
+    
+    async function login(){
+    window.location.href = "login.html"
+    }
+    
+</script>
+</html>

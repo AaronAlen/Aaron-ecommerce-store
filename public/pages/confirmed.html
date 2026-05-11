@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/index.css">
+    <style>
+        *{
+            background-color: green;
+        }
+        h1{
+            background-color: green;
+            color: white;
+        }
+        #btn{
+            box-shadow: 5px 5px 5px black;
+        }
+
+        @media (max-width:420px) {
+            #div0{
+                height: 90vh !important;
+            }
+            h1{
+                text-align: center;
+                font-size: 30px;
+            }
+            #btn{
+                height:7% !important;
+                width: 70% !important;
+                font-size: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="div0" style="display: flex; justify-content: center;  align-items: center; width: 100%; height: 100vh;">
+        <div id="home" style="display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 50px; box-shadow: 0px 0px 10px rgb(0, 0, 0); width: 90%; height: 90%;">
+            <img src="../images/regulatory-compliance.png" width="100px" alt="">
+            <h1>Order Conformed</h1>
+            <h1>Thankyou for your Order...!</h1>
+            <button id="btn" onclick="home()">continue purchase</button>
+        </div>
+    </div>
+</body>
+<script>
+    function home(){
+        window.location.href = "../index.html"
+    }
+</script>
+</html>

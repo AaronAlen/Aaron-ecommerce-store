@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0%;
+        padding: 0%;
+        background-color: white;
+    }
+    #inside{
+        display: flex;
+
+    }
+    @media (min-width : 0px) and (max-width: 420px){
+        #div{
+            padding-top: 10% !important;
+            align-items: start !important;
+        }
+        #inside{
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            height: 80vh !important;
+        }
+        #parts{
+            width: 90% !important;
+            margin-top: 5% !important;
+            /* height: 40% !important; */
+        }
+        #partB{
+            height: 45vh !important;
+        }
+         #email, #password, #button{
+            height: 15% !important;
+         }
+        #email{
+            margin-top: 10% !important;
+        }
+        p,span{
+            font-size: 13px !important;
+        }
+    }
+</style>
+<body>
+     <div id="div" style="height: 100vh; display: flex; justify-content: center;padding-top: 2%; align-items: center;">
+        <div id="inside" style=" justify-content: space-evenly; align-items: center; border-radius: 50px; background-color: white; width: 90%; height: 90%; box-shadow: 0px 0px 25px gray;">
+            <div id="parts" style="width: 45%; border-radius: 50px; height: 90%; background-image:  linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(../images/ze-vieira-sr927_EVdqk-unsplash.jpg); background-position: center; background-size: cover; background-blend-mode: darken;"></div>
+            <div id="parts" id="partB" style="display: flex; justify-content: center; align-items: center; width: 45%;border-radius: 50px; height: 90%; background-color: white;">
+                <div id="partB" style="display: flex; flex-direction: column; align-items: center; width: 80%; height: 100%; text-align: center; background-color: white;">
+                    <input id="email" type="text" placeholder="email" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 30%;">        
+                    <input id="password" type="text" placeholder="password" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
+                    <button onclick="submt()" id="button" style="width: 80%; height: 10%; background-color:rgb(244, 113, 65); border: none; border-radius: 10px; margin-top: 10%; color: white; font-size: 20px;">login</button>
+                    <p style="color: gray; margin-top: 10%;">If you don't have an Account <span onclick="redirect(1)" style="color: blue; text-decoration: underline; cursor: pointer; text-decoration: none;">Sign Up</span></p>
+                    <p id="p" style="color: gray; margin-top: 10%;">Or back to <span onclick="redirect(2)" style="color: blue; text-decoration: underline; cursor: pointer; text-decoration: none;">home</span></p>
+                </div>
+            </div>
+        </div>
+     </div>
+</body>
+<script>
+    
+    async function submt(){
+      const email = document.getElementById("email").value
+      const password = document.getElementById("password").value
+      try{
+        const res = await fetch(`http://${window.location.hostname}:3000/api/login`,{
+            method : "post",
+            headers : {"content-type" : "application/json"},
+            body : JSON.stringify({email,password})
+        })
+        const data = await res.json()
+        console.log(data);
+        if(!res.ok)alert(data.message)
+        if(res.ok){
+            localStorage.setItem("token" , data.token)
+            console.log(localStorage.getItem("token"));
+            alert(data.message)
+            if(res.status === 200){console.log("hi"); window.location.href = "../index.html" }
+        }
+      }
+      catch(error){
+        console.log(error.message); 
+      }
+
+    }
+
+    function redirect(where){
+        if(where == 1)window.location.href = "register.html"
+        else window.location.href = "../index.html"
+    }
+
+</script>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="./style/index.css">
+<style>
+        *{
+            background-color: white;
+            /* margin: 0%;
+            padding: 0%; */
+        }
+        #filterImg, #deleteImg{
+          position: fixed;
+        }
+
+        #filter{
+          display: block; 
+          z-index: 2; 
+          position: fixed; 
+          /* top: -200px; */
+          overflow-y: auto;
+          height: 73vh;
+          width: 16%;
+          margin-left: 3%;
+          border-radius: 10px;
+          box-shadow: 0px 0px 10px rgb(172, 172, 172);
+          padding: 2%;
+        }
+
+        #title{
+          background-color: white;
+          color: black;
+          text-align: center;
+        }
+        #div{
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr ;
+          margin-left: 7%;
+        }
+
+        .card{
+            width: 250px;
+            /* height: 350px; */
+            background-color: white;
+            margin: 10%;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 5px 5px 10px rgb(172, 172, 172);
+
+        }
+        .card img{
+            /* width: 200px; */
+            height: 150px; 
+            margin: 10%;
+            border-radius: 10px;
+            margin-bottom: 0%;
+            /* box-shadow: 5px 5px 10px rgb(172, 172, 172); */
+
+        }
+        .card h2,p,h1{
+            background-color: white;
+        }
+
+        #btn{
+          background-color: orange;
+          width: 50%;
+          border-radius:10px;
+          border: none;
+          margin-bottom: 10%;
+          color: white;
+          box-shadow: 5px 5px 10px rgb(172, 172, 172);
+          width:auto;
+          padding: 1%;
+        }
+        
+        #ankr{
+          background-color: orange;
+          color: white;
+          text-decoration: none;
+        }
+
+        .card p,.card h2{
+          padding-left: 2%;
+          padding-right: 2%;
+        }
+        .btns{
+          width: 100%;
+          font-size: 18px;
+        }
+
+        @media (max-width : 420px){
+          #filter{
+            width: 200px;
+            margin-left: 10%;
+          }
+        #div{
+          margin-left: 0% !important;
+        }  
+        #btnO{
+          top: 1% !important;
+          left: 70% !important;
+        }
+        #btnc{
+          top: 1% !important;
+          left: 80% !important;
+        }
+        #btnl{
+          top: 1% !important;
+          left: 90% !important;
+        }
+        #btn{
+          width: 50% !important;
+          font-size: 20px !important;
+        }
+        }
+
+
+</style>
+</head>
+<body>
+
+  <img src="./images/tracking.png"  width="30px" id="btnO" onclick="orders()" style="background-color: transparent; position: fixed; left: 75%; z-index: 3;"></img>
+  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="cart()" style="background-color: transparent; position: fixed; left: 80%;"></img>
+  <img src="./images/user (2).png"  width="30px" id="btnl" onclick="login()" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
+  
+    <img id="filterImg" src="./images/filter.png" width="30px" onclick="filter()"></img>
+    <img id="deleteImg" src="./images/delete (1).png" width="30px" onclick="filter()" style="display: none;"></img>
+
+    <div id="filter" style="display: none;">
+    </div>
+
+    <div id="home" style="display: grid; justify-content: space-evenly; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 50px;">
+    </div>
+</body>
+<script>
+    function viewMore(){
+        window.location.href = "pages/viewMore.html"
+    }
+    async function orders(){
+    window.location.href = "pages/orders.html"
+    }
+    async function cart(){
+    window.location.href = "pages/cart.html"
+    }
+
+    async function login(){
+    window.location.href = "pages/login.html"
+    }
+    
+
+          let div = document.getElementById("div");
+          let home = document.getElementById("home");
+          let loadingTurn = 1
+
+      async function fetchdata() {
+        let response = await fetch(`http://${window.location.hostname}:3000/product/find`);
+        let products = await response.json();
+        display(products.data,1)
+
+      }
+
+      function display(products,reload){
+        
+        let newarr = []
+        for(value of products){
+            let newdata = {id:value.id,
+                title:value.title,
+                description:value.description,
+                catogery:value.category,
+                price:value.price,
+                images:value.images
+            }
+            newarr.push(newdata)
+        }
+
+        let newarr1 = {}
+
+        for(v of newarr){
+            if(newarr1[v.catogery] == undefined) newarr1[v.catogery] = [v]
+            else newarr1[v.catogery].push(v)
+
+        }
+
+        home.innerHTML = ""
+
+        let filter = document.getElementById("filter")
+        filter.style.display = "none"
+
+          for([i,v] of Object.entries(newarr1)){
+            let catogerydiv = document.createElement("div")
+            catogerydiv.id = "div"
+            let catogerytitle = document.createElement("h1")
+            if(loadingTurn == 1)filter.innerHTML +=`<input type="checkbox" name="category" value="${i}" style="color: white;">${i}</br>`
+
+          for(d of v){
+            let img = d.images[0]
+            catogerydiv.innerHTML += `
+            <div class="card" >
+                <img src="${img}" alt="" >
+                <h2>${d.title}</h2>
+                <p>${d.description}</p>
+                <h1>${d.price}</h1>
+                <button id="btn" class="btns" onclick = "submt('${i}')">view more</button>
+            </div>`
+           if(reload == 1)home.append(catogerydiv)
+           console.log(d.price);
+        }
+
+      }
+      if(loadingTurn == 1)filter.innerHTML+=`<div style = "text-align : center;"><button id="btn" style = "margin-top : 15%;"onclick="submt(null)">Filter</button></div>`
+      loadingTurn = 2
+      }
+
+
+      fetchdata();
+
+      async function submt(catgry){
+        localStorage.setItem("category", "")
+        let checkbox = document.querySelectorAll('input[name=category]:checked')
+        let category = [...checkbox].map( r => r.value)
+        console.log(category);
+        if(catgry == null && category.length == 0){console.log("hi",category);return alert("you haven't click anything in filter");}
+        // category = category?category:catgry
+        category = catgry?catgry:category
+        // if(category){
+        localStorage.setItem("category", category)
+        // filter()
+        viewMore()
+      }
+
+      function filter(){
+        let filter = document.getElementById("filter")
+        let deleteImg = document.getElementById("deleteImg")
+        let filterImg = document.getElementById("filterImg")
+
+        if(filter.style.display == "none"){filter.style.display = "block";deleteImg.style.display = "block";filterImg.style.display = "none"}
+        else {filter.style.display = "none";deleteImg.style.display = "none";filterImg.style.display = "block"}
+      }
+
+
+    
+</script>
+</html>
+
