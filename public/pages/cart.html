@@ -181,7 +181,7 @@
     
     
     async function goToCart(){
-            if(!localStorage.getItem("token")) return alert("no token")
+            if(!localStorage.getItem("token")) return alert("login to view orders")
             const res = await fetch(`/product/goToCart`,{
                 method : "GET",
                 headers : {

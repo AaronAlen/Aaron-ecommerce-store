@@ -203,7 +203,7 @@
         fetching()
 
         async function cart(id){
-            if(!localStorage.getItem("token")) return alert("login first")
+            if(!localStorage.getItem("token")) return alert("login to add products to cart")
             console.log("id",id);
             const res = await fetch(`/product/addToCart/${id}`,{
                 method : "post",
@@ -228,7 +228,7 @@
         
         async function address(id){
             let count = 1
-            if(!localStorage.getItem("token")) return alert("login first")    
+            if(!localStorage.getItem("token")) return alert("login to buy products")    
             console.log("id",id);
             localStorage.setItem("orderId", id)    
             localStorage.setItem("count", count)                    

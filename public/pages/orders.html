@@ -173,7 +173,7 @@
     
     
     async function oders(){
-            if(!localStorage.getItem("token")) return alert("no token")
+            if(!localStorage.getItem("token")) return alert("login to view orders")
             const res = await fetch(`/product/goToOrders`,{
                 method : "GET",
                 headers : {
