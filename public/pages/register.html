@@ -58,7 +58,7 @@
                     <input id="name" type="text" placeholder="user name *" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
                     <input id="email" type="text" placeholder="email *" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">        
                     <input id="password" type="text" placeholder="password *" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
-                    <input id="access" type="text" placeholder="access" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
+                    <!-- <input id="access" type="text" placeholder="access" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;"> -->
                     <button onclick="submt()" style="width: 80%; height: 10%; background-color:rgb(244, 113, 65); border: none; border-radius: 10px; margin-top: 10%; color: white; font-size: 20px;">register</button>
                     <p style="color: gray; margin-top: 10%;">If you already have an Account <span onclick="redirect(1)" style="color: blue; text-decoration: underline; cursor: pointer;text-decoration: none;">Log In</span></p>
                     <p style="color: gray; margin-top: 5%;">Or back to <span onclick="redirect(2)" style="color: blue; text-decoration: underline; cursor: pointer;text-decoration: none;">home</span></p>
@@ -70,12 +70,19 @@
 <script>
     async function submt(e){
         console.log("hi");
-        const name = document.getElementById("name").value
+        let nameAccess = document.getElementById("name").value
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
-        let access = document.getElementById("access").value
-
-
+        // let access = document.getElementById("access").value
+        let ogName = nameAccess
+        nameAccess = nameAccess.trim().split(" ")
+        let access = nameAccess.pop()
+        if(access == "Admin" || access == "admin"){access = access.toLowerCase(); name = nameAccess.join(" ");}
+        else {name = ogName; access = null;}
+        
+        console.log("access",access);
+        console.log("name : ",name);
+        if(!name)return alert("user name cannot be admin")
         if(!name || !email || !password)return alert("fill the required feilds")
         
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -83,7 +90,7 @@
 
         if(access == "Admin" || access == "admin")access = access.toLowerCase()
         else {
-            if(access == "")access = "user"
+            if(access == null)access = "user"
             else return alert(`${access} is not a valid access`)
         }
 

@@ -27,7 +27,7 @@ const login = async (req, res) => {
   if (!user) return res.status(500).json({ message: "user not exist" });
   if (await bcrypt.compare(password, user.password)) {
     const token = generateToken(user);
-    res.status(200).json({ message: "login successfully", token });
+    res.status(200).json({ message: "login successfully", token, access : user.access });
   } else res.status(500).json({ message: "incorrect password" });
 };
 

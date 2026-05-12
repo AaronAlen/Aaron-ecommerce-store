@@ -114,4 +114,37 @@ const goToOrders = async (req,res)=>{
     res.json(data)
 }
 
-module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders}
+const newOrders = async (req,res) => {
+    const data = await users.aggregate([
+        {
+            $unwind : "$orders"
+        },
+        {
+            $group : {
+                _id : {
+                    $toObjectId: "$orders.productId"
+                },
+                quantity : {$sum : 1}
+            }
+        },     
+        {
+            $lookup : {
+                from : "ogproducts",
+                localField : "_id",
+                foreignField : "_id",
+                as : "productDetails"
+            }
+        },
+        {
+            $unwind : "$productDetails"
+        },
+        // {
+        //     $sort : {
+        //         "$orders.createdAt" : 1
+        //     }
+        // }
+    ])
+    res.json({data})
+}
+
+module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders}

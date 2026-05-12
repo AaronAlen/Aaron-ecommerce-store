@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style/index.css">
+    <style>
+        *{
+            margin: 0%;
+            padding: 0%;
+            background-color: transparent;
+        }
+         #product, #subProduct, #cartTitle, #subCartTitle ,#checkoutDiv{
+            width: 90%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        #subProduct, #headingPrice{
+            width: 100px;
+        }
+        #imgP{
+            /* background-color: black; */
+            width: 100px;
+            height: 100px;
+            border-radius:20px;
+            box-shadow: 0px 0px 10px rgb(201, 200, 200);
+        }
+        #product button{
+            margin-bottom: 1%; 
+            padding: 1%;
+            background-color: red;
+        }
+        #homeProductDiv{
+            width: 80%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: space-around; */
+            align-items: center;
+            border-radius: 50px;
+            background-color: white;
+            width: 90%; height:auto;
+            box-shadow: 0px 0px 25px gray;
+            gap: 50px;
+        }
+        #productDiv{
+            width: 90%;
+            height: auto;
+        }
+        #total{
+            display: flex;
+            flex-direction: column;     
+            align-items: center;   
+            background-color: transparent;
+        }
+        #total p{
+            background-color: transparent;
+        }
+        /* span{
+            text-decoration: ;
+        } */
+
+        /* #btn1{
+            background-color: green;
+        } */
+         #btn{
+            height: 60%;
+            width: 17%;
+         }
+
+        .hoverClass{
+          transition: 0.2s ease;
+        }
+        .hoverClass:hover{
+          transform: scale(1.05);
+          box-shadow: 5px 5px 50px rgb(172, 172, 172);   
+        }
+
+        .hoverClassb{
+          transition: 0.2s ease;
+        }
+        .hoverClassb:hover{
+          transform: scale(1.3);
+        }
+
+    
+    @media (max-width:420px){
+        /* #inside{
+            width: 100% !important;
+            padding: 0% !important;
+            height: 80vh !important;
+        } */
+        #homeProductDiv{
+            margin-top: 5%;
+            width: 95%;
+        }
+        #product{
+            position: relative;
+            height: 100px;
+            padding-bottom: 10% !important;
+
+        }
+        #imgP{
+            position: absolute !important;
+            top: 0% !important;
+            left: 0% !important;            
+        }        
+        #headingPrice{
+            position: absolute !important;
+            top: 25% !important;
+            left: 45% !important;            
+        }
+        #subProduct{
+            position: absolute !important;
+            top: 20% !important;
+            left: 90% !important;            
+        }        
+        #totalPrice{
+            position: absolute !important;
+            top: 230% !important;
+            left: -530% !important;            
+        } 
+        .add{
+            margin-left: 30%;
+        }
+        .dlt{
+            position: absolute;
+            top: 45% !important;
+            left: 90% !important;
+            height: 25% !important;
+            width: 20% !important;
+        }
+        .dlt1{
+            position: absolute;
+            top: 25% !important;
+            left: 90% !important;
+            height: 25% !important;
+            width: 20% !important;
+        }
+        #totalCost{
+            padding-left: 10% !important;
+            text-align: start !important;
+        }
+        #checkoutDiv{
+            display: block !important;
+            text-align: center;
+            padding: 5%;
+            /* height: 7vh !important; */
+        }
+        #checkoutDiv button{
+            width: 30% !important;
+            height: 40% !important;
+            font-size: 15px;
+            gap: 2px !important;
+        }
+        h4{
+            font-size: 13px !important;
+        }
+
+
+    }
+
+    </style>
+</head>
+<body style="overflow-x: hidden;">
+    <div id="inside" style="height: auto; display: flex; justify-content: center; align-items: center; padding: 5%;">
+        
+            <div id="homeProductDiv">
+                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
+
+                <div id="productDiv">
+                </div>  
+
+                <div id="total" style=" width: 90%; height: auto;">
+
+            </div>
+        </div>
+        
+        
+    </div>
+</body>
+<script>
+    
+    const div = document.getElementById("productDiv")
+    
+    let response;
+    
+    
+    async function oders(){
+            if(!localStorage.getItem("token")) return alert("login to view orders")
+            const res = await fetch(`/product/newOrders`,{
+            // const res = await fetch(`http://${window.location.hostname}:3000/product/goToOrders`,{
+                method : "GET",
+                headers : {
+                    "Content-Type" : "application/json",
+                    "Authorization" : `Bearer ${localStorage.getItem ("token")}`
+                }
+            })
+             response = await res.json()
+            console.log(response);
+            // data.forEach((product,index)=>product.count = count[index])
+        
+            display(response.data)
+        }
+
+
+        oders().then(()=>console.log(response.dat))
+
+
+
+
+        function dlt(index){
+            // response.splice(index,1)
+            response[index].status = "canceled"
+            div.innerHTML =""
+            console.log(response[index].status);
+            display(response)
+        }
+
+        function display(products){
+            products.forEach((product, index) => {
+                console.log(product);
+                let color = product.quantity>1?"background-color :orange;":"background-color :green;"
+                div.innerHTML += `
+                <div id="product" style="display: flex; margin-bottom: 2%;">
+                    <img id="imgP" class="hoverClass" src=${product.productDetails.images[0]} width="100px" alt="">
+                    <div id="headingPrice" "width: 150px">
+                        <h4 >${product.productDetails.title}</h4>
+                    </div>
+                    <button id="btn"  class="dlt1 hoverClass" style="${color}" >${product.quantity}</button>                
+                </div>`
+            })
+
+        }
+
+
+
+                    //<button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                
+
+
+
+
+</script>
+</html>

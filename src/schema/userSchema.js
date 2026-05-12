@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const ogProducts = require("../schema/ogProducts")
 
 const address = new mongoose.Schema({
     name : String,
@@ -12,7 +13,10 @@ const address = new mongoose.Schema({
 })
 
 const product = new mongoose.Schema({
-    productId : String,
+    productId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : ogProducts
+    },
     count : Number
 })
 
@@ -27,7 +31,7 @@ const orders = new mongoose.Schema({
         default : "Ordered"
     },
     address : address
-})
+},{timestamps:true})
 
 const userschema = new mongoose.Schema({
     name : {

@@ -85,7 +85,8 @@
             localStorage.setItem("token" , data.token)
             console.log(localStorage.getItem("token"));
             alert(data.message)
-            if(res.status === 200){console.log("hi"); window.location.href = "../index.html" }
+            if(data.access == "admin")window.location.href = "newOrders.html"
+            else if(res.status === 200){console.log("hi"); window.location.href = "../index.html" }
         }
       }
       catch(error){
