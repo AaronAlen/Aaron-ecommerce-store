@@ -42,8 +42,8 @@ const userschema = new mongoose.Schema({
     },
     access : {
         type : String,
-        enum : ["access","user", "admin"],
-        default : "access"
+        enum : ["user", "admin"],
+        default : "user"
     },
     cart : [product],
     orders : [orders]

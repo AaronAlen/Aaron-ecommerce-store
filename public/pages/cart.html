@@ -71,8 +71,30 @@
         } */
          #btn{
             height: 60%;
-
          }
+
+        .hoverClass{
+          transition: 0.2s ease;
+        }
+        .hoverClass:hover{
+          transform: scale(1.05);
+          box-shadow: 5px 5px 50px rgb(172, 172, 172);   
+        }
+
+        .hoverClassb{
+          transition: 0.2s ease;
+        }
+        .hoverClassb:hover{
+          transform: scale(1.3);
+        }
+
+        .activeClassb{
+          transition: 0.2s ease;
+        }
+        .activeClassb:hover{
+          transform: scale(1.3);
+        }
+
     
     @media (max-width:420px){
         #inside{
@@ -183,6 +205,7 @@
     async function goToCart(){
             if(!localStorage.getItem("token")) return alert("login to view orders")
             const res = await fetch(`/product/goToCart`,{
+            // const res = await fetch(`http://${window.location.hostname}:3000/product/goToCart`,{
                 method : "GET",
                 headers : {
                     "Content-Type" : "application/json",
@@ -216,18 +239,18 @@
             products.forEach((product, index) => {
                 div.innerHTML += `
                 <div id="product" style="display: flex;">
-                    <img id="imgP" src=${product.images[0]} width="100px" alt="">
+                    <img id="imgP" class="hoverClass" src=${product.images[0]} width="100px" alt="">
                     <div id="headingPrice" "width: 150px">
                         <h6 >${product.title}</h6>
                         <h3 >${product.price}</h3>
                     </div>
                     <div id="subProduct">
-                        <img src="../images/add.png" onclick ="add(${index})" width="20px"  height="20px"  alt=""style="padding-left:10px">
+                        <img src="../images/add.png" class="hoverClassb" onclick ="add(${index})" width="20px"  height="20px"  alt=""style="padding-left:10px">
                         <h3 class="add" style="padding-left:10px">${product.count}</h3>
-                        <img class="add" src="../images/remove.png" onclick ="sub(${index})" width="20px"  height="20px" alt="" style="padding-left:10px"> 
+                        <img class="add activeClassb" src="../images/remove.png"  onclick ="sub(${index})" width="20px"  height="20px" alt="" style="padding-left:10px"> 
                         <h3 id="totalPrice" style="padding-left:20px">${(product.price*product.count).toFixed(2)}</h3>                   
                     </div>
-                    <button id="btn" class="dlt" onclick = "dlt(${index})" >delete</button>                
+                    <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" >delete</button>                
                 </div>`
                 totalPrice += product.price * product.count
             })
@@ -238,8 +261,8 @@
                     <p>your order eligible for free delivery</p>
                 </div>
                 <div id="checkoutDiv" style="height:auto; margin: 2%; display: flex; justify-content: center; align-items: center; gap: 20%;">
-                    <button id="btn" onclick="save()" style="margin-bottom: 5%; margin-top: 5%; background-color: green; width: 20%;">save</button>
-                    <button id="btn" onclick="checkout()" style="margin-bottom: 5%; margin-top: 5%; width: 20%;">checkout</button>
+                    <button id="btn" onclick="save()" class="hoverClass" style="margin-bottom: 5%; margin-top: 5%; background-color: green; width: 20%;">save</button>
+                    <button id="btn" onclick="checkout()" class="hoverClass" style="margin-bottom: 5%; margin-top: 5%; width: 20%;">checkout</button>
                 </div>
 
             `
@@ -265,6 +288,7 @@
             let details = data.map(product => {return {productId : product._id, count : product.count}})
             console.log(details);
             const res = await fetch(`/product/saveProducts`,{
+            // const res = await fetch(`http://${window.location.hostname}:3000/product/saveProducts`,{
                 method : "post",
                 headers : {
                     "content-type" : "application/json",

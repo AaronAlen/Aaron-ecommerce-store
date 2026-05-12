@@ -77,10 +77,27 @@
             border: none;
             border-radius: 20px;
             padding: 4%;
+            box-shadow: 5px 5px 5px rgb(167, 166, 166);
         }
         #btn2{
             background-color: green;
         }
+
+        .hoverClass{
+          transition: 0.2s ease;
+        }
+        .hoverClass:hover{
+          transform: scale(1.05);
+          box-shadow: 5px 5px 50px rgb(172, 172, 172);   
+        }
+
+        .hoverClassb{
+          transition: 0.2s ease;
+        }
+        .hoverClassb:hover{
+          transform: scale(1.1);
+        }        
+
         
         @media (min-width:0px) and (max-width:420px){
             #div0{
@@ -159,13 +176,13 @@
 </head>
 <body>
 
-  <img src="../images/tracking.png"  width="30px" id="btnO" onclick="orders()" style="background-color: transparent; position: fixed; top: 2%; left: 75%; z-index: 3;"></img>
-  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="goToCart()" style="background-color: transparent; position: fixed; left: 80%;"></img>
-  <img src="../images/user (2).png"  width="30px" id="btnl" onclick="login()" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
+  <img src="../images/tracking.png"  width="30px" id="btnO" onclick="orders()" class="hoverClassb" style="background-color: transparent; position: fixed; top: 2%; left: 75%; z-index: 3;"></img>
+  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="goToCart()" class="hoverClassb" style="background-color: transparent; position: fixed; left: 80%;"></img>
+  <img src="../images/user (2).png"  width="30px" id="btnl" onclick="login()" class="hoverClassb" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
 
 
      <div id="div0">
-        <div id="inside">
+        <div id="inside" class="hoverClass">
 
 
         </div>
@@ -180,19 +197,20 @@
 
         async function fetching() {
             let data = await fetch(`/product/findOne/${id}`)
+            // let data = await fetch(`http://${window.location.hostname}:3000/product/findOne/${id}`)
             let rslts = await data.json()
             let rslt = rslts.data[0]
             console.log(rslt);
 
             inside.innerHTML = `
-                                <div class = "parts" id="part1"><img src="${rslt.images[0]}" alt=""></div>
+                                <div class = "parts" id="part1"><img src="${rslt.images[0]}" alt="" class="hoverClassb"></div>
                                 <div class =" parts">
                                     <h2>${rslt.title}</h2>
                                     <p>${rslt.description}</p>
                                     <h1>${rslt.price}</h1>
                                     <div class = "btns">
-                                        <button id = "btn1" onclick = "address('${rslt._id}')">Buy Now</button>
-                                        <button id = "btn2" onclick = "cart('${rslt._id}')">Add to Cart</button>
+                                        <button id = "btn1" onclick = "address('${rslt._id}')" class="hoverClass">Buy Now</button>
+                                        <button id = "btn2" onclick = "cart('${rslt._id}')" class="hoverClass">Add to Cart</button>
                                     </div>
                                 </div>
                                 `
@@ -206,6 +224,7 @@
             if(!localStorage.getItem("token")) return alert("login to add products to cart")
             console.log("id",id);
             const res = await fetch(`/product/addToCart/${id}`,{
+            // const res = await fetch(`http://${window.location.hostname}:3000/product/addToCart/${id}`,{
                 method : "post",
                 headers : {
                     "content-type" : "application/json",

@@ -148,18 +148,18 @@
         <div id="home" style="margin-top:5%; overflow-x: hidden; width: 90%; text-align: center; border-radius: 50px; background-color: rgb(236, 235, 235); width: 90%; height: 80%; box-shadow: 0px 0px 25px gray;">
             <div id="address">Address</div>
             <div id="details">
-                <div id="fields"><label for="" id="label">name</label><input type="text" class="input" id="name" value=""></div>
-                <div id="fields"><label for="" id="label">email</label><input type="text" class="input" id="email" value="" ></div>
-                <div id="fields"><label for="" id="label">phone</label><input type="text" class="input" id="phone" value=""></div>
-                <div id="fields"><label for="" id="label">area</label><input type="text" class="input" id="area" value=""></div>
-                <div id="fields"><label for="" id="label">building</label><input type="text" class="input" id="house" value=""></div>
-                <div id="fields"><label for="" id="label">landmark</label><input type="text" class="input" id="landmark" value=""></div>
+                <div id="fields"><label for="" id="label">name</label><input type="text" class="input" id="name" value="" placeholder="*"></div>
+                <div id="fields"><label for="" id="label">email</label><input type="text" class="input" id="email" value="" placeholder="*"></div>
+                <div id="fields"><label for="" id="label">phone</label><input type="text" class="input" id="phone" value="" placeholder="*"></div>
+                <div id="fields"><label for="" id="label">area</label><input type="text" class="input" id="area" value="" placeholder="*"></div>
+                <div id="fields"><label for="" id="label">building</label><input type="text" class="input" id="house" value="" placeholder="*"></div>
+                <div id="fields"><label for="" id="label">landmark</label><input type="text" class="input" id="landmark" value="" placeholder="*"></div>
             </div>
             <div id="details1">
-                <div id="fields1"><label for="" id="label">nation</label><input type="text" class="input1" id="nation" value=""></div>
-                <div id="fields1"><label for="" id="label">state</label><input type="text" class="input1" id="state" value=""></div>
-                <div id="fields1"><label for="" id="label">city</label><input type="text" class="input1" id="city" value=""></div>
-                <div id="fields1"><label for="" id="label">pincode</label><input type="text" class="input1" id="pincode" value=""></div>
+                <div id="fields1"><label for="" id="label">nation</label><input type="text" class="input1" id="nation" value="" placeholder="*"></div>
+                <div id="fields1"><label for="" id="label">state</label><input type="text" class="input1" id="state" value="" placeholder="*"></div>
+                <div id="fields1"><label for="" id="label">city</label><input type="text" class="input1" id="city" value="" placeholder="*"></div>
+                <div id="fields1"><label for="" id="label">pincode</label><input type="text" class="input1" id="pincode" value="" placeholder="*"></div>
             </div>
             <button id="btn"  onclick = "confirmed()" >continue</button>
         </div>
@@ -216,6 +216,11 @@
         let state = document.getElementById("state").value
         let pincode = document.getElementById("pincode").value
 
+        if(!name || !email || !phone || !building || !area || !city || !state || !pincode)return alert("fill the required feilds")
+
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+        if(!regex.test(email)) return alert("Invalid Email");        
+
         let productId = localStorage.getItem("orderId")
         let count = localStorage.getItem("count")
         let img = localStorage.getItem("img")
@@ -223,6 +228,7 @@
         console.log(productId,count);
 
         let res = await fetch(`/product/orderConfirmed`,{
+        // let res = await fetch(`http://${window.location.hostname}:3000/product/orderConfirmed`,{
             method : "post",
             headers : {
                 "content-type" : "application/json",

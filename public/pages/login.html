@@ -66,8 +66,14 @@
     async function submt(){
       const email = document.getElementById("email").value
       const password = document.getElementById("password").value
+
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+      if(!regex.test(email)) return alert("Invalid Email");
+
+
       try{
         const res = await fetch(`/api/login`,{
+        // const res = await fetch(`http://${window.location.hostname}:3000/api/login`,{
             method : "post",
             headers : {"content-type" : "application/json"},
             body : JSON.stringify({email,password})

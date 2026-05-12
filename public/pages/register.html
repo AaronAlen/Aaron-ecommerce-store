@@ -55,9 +55,9 @@
             <div id="parts" id="partA" style="width: 45%; border-radius: 50px; height: 90%; background-image:  linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(../images/woliul-hasan-ucBuijvbyyg-unsplash.jpg); background-position: center; background-size: cover; background-blend-mode: darken;"></div>
             <div id="parts"  style="display: flex; justify-content: center; align-items: start; width: 45%;border-radius: 50px; height: 90%; background-color: white;">
                 <div id="partB" style="width: 80%; height: 100%; text-align: center; background-color: white;">
-                    <input id="name" type="text" placeholder="user name" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
-                    <input id="email" type="text" placeholder="email" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">        
-                    <input id="password" type="text" placeholder="password" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
+                    <input id="name" type="text" placeholder="user name *" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
+                    <input id="email" type="text" placeholder="email *" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">        
+                    <input id="password" type="text" placeholder="password *" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
                     <input id="access" type="text" placeholder="access" style="width: 90%; height: 10%;background-color:rgb(237, 237, 237); border: none; border-radius: 10px; padding-left: 10%; margin-top: 10%;">
                     <button onclick="submt()" style="width: 80%; height: 10%; background-color:rgb(244, 113, 65); border: none; border-radius: 10px; margin-top: 10%; color: white; font-size: 20px;">register</button>
                     <p style="color: gray; margin-top: 10%;">If you already have an Account <span onclick="redirect(1)" style="color: blue; text-decoration: underline; cursor: pointer;text-decoration: none;">Log In</span></p>
@@ -73,9 +73,23 @@
         const name = document.getElementById("name").value
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
-        const access = document.getElementById("access").value
+        let access = document.getElementById("access").value
+
+
+        if(!name || !email || !password)return alert("fill the required feilds")
+        
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+        if(!regex.test(email)) return alert("Invalid Email");
+
+        if(access == "Admin" || access == "admin")access = access.toLowerCase()
+        else {
+            if(access == "")access = "user"
+            else return alert(`${access} is not a valid access`)
+        }
+
         try{
             const res = await fetch(`/api/createUser`, {
+            // const res = await fetch(`http://${window.location.hostname}:3000/api/createUser`, {
                 method : "post",
                 headers: {
                     "Content-Type": "application/json"

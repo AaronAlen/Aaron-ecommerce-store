@@ -69,6 +69,22 @@
             height: 60%;
             width: 17%;
          }
+
+        .hoverClass{
+          transition: 0.2s ease;
+        }
+        .hoverClass:hover{
+          transform: scale(1.05);
+          box-shadow: 5px 5px 50px rgb(172, 172, 172);   
+        }
+
+        .hoverClassb{
+          transition: 0.2s ease;
+        }
+        .hoverClassb:hover{
+          transform: scale(1.3);
+        }
+
     
     @media (max-width:420px){
         /* #inside{
@@ -175,6 +191,7 @@
     async function oders(){
             if(!localStorage.getItem("token")) return alert("login to view orders")
             const res = await fetch(`/product/goToOrders`,{
+            // const res = await fetch(`http://${window.location.hostname}:3000/product/goToOrders`,{
                 method : "GET",
                 headers : {
                     "Content-Type" : "application/json",
@@ -195,21 +212,23 @@
 
 
         function dlt(index){
-            data.splice(index,1)
+            // response.splice(index,1)
+            response[index].status = "canceled"
             div.innerHTML =""
-            display(data)
+            console.log(response[index].status);
+            display(response)
         }
 
         function display(products){
             products.forEach((product, index) => {
                 div.innerHTML += `
-                <div id="product" style="display: flex;">
-                    <img id="imgP" src=${product.img} width="100px" alt="">
+                <div id="product" style="display: flex; margin-bottom: 2%;">
+                    <img id="imgP" class="hoverClass" src=${product.img} width="100px" alt="">
                     <div id="headingPrice" "width: 150px">
                         <h4 >${product.title}</h4>
                     </div>
-                    <button id="btn" class="dlt1" onclick = "dlt(${index})" style="background-color: green;" >${product.status}</button>                
-                    <button id="btn" class="dlt" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                
+                    <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
+                    <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                
                 </div>`
             })
 

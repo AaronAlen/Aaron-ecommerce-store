@@ -27,6 +27,8 @@
           border-radius: 10px;
           box-shadow: 0px 0px 10px rgb(172, 172, 172);
           padding: 2%;
+          box-shadow: 5px 5px 50px rgb(172, 172, 172);
+
         }
 
         #title{
@@ -89,6 +91,20 @@
           width: 100%;
           font-size: 18px;
         }
+        .hoverClass{
+          transition: 0.2s ease;
+        }
+        .hoverClass:hover{
+          transform: scale(1.05);
+          box-shadow: 5px 5px 50px rgb(172, 172, 172);   
+        }
+
+        .hoverClassb{
+          transition: 0.2s ease;
+        }
+        .hoverClassb:hover{
+          transform: scale(1.3);
+        }
 
         @media (max-width : 420px){
           #filter{
@@ -121,12 +137,12 @@
 </head>
 <body>
 
-  <img src="./images/tracking.png"  width="30px" id="btnO" onclick="orders()" style="background-color: transparent; position: fixed; left: 75%; z-index: 3;"></img>
-  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="cart()" style="background-color: transparent; position: fixed; left: 80%;"></img>
-  <img src="./images/user (2).png"  width="30px" id="btnl" onclick="login()" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
+  <img src="./images/tracking.png"  width="30px" id="btnO" onclick="orders()" class="hoverClassb" style="background-color: transparent; position: fixed; left: 75%; z-index: 3;"></img>
+  <img src="../images/trolley.png"  width="30px" id="btnc" onclick="cart()" class="hoverClassb" style="background-color: transparent; position: fixed; left: 80%; z-index: 3;"></img>
+  <img src="./images/user (2).png"  width="30px" id="btnl" onclick="login()" class="hoverClassb" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
   
-    <img id="filterImg" src="./images/filter.png" width="30px" onclick="filter()"></img>
-    <img id="deleteImg" src="./images/delete (1).png" width="30px" onclick="filter()" style="display: none;"></img>
+    <img id="filterImg" src="./images/filter.png" width="30px" onclick="filter()"  class="hoverClassb"></img>
+    <img id="deleteImg" src="./images/delete (1).png" width="30px" onclick="filter()"  class="hoverClassb" style="display: none;"></img>
 
     <div id="filter" style="display: none;">
     </div>
@@ -156,6 +172,7 @@
 
       async function fetchdata() {
         let response = await fetch(`/product/find`);
+        // let response = await fetch(`http://${window.location.hostname}:3000/product/find`);
         let products = await response.json();
         display(products.data,1)
 
@@ -192,17 +209,17 @@
             let catogerydiv = document.createElement("div")
             catogerydiv.id = "div"
             let catogerytitle = document.createElement("h1")
-            if(loadingTurn == 1)filter.innerHTML +=`<input type="checkbox" name="category" value="${i}" style="color: white;">${i}</br>`
+            if(loadingTurn == 1)filter.innerHTML +=`<input type="checkbox" name="category" value="${i}"  class="hoverClassb" style="color: white; cursor: pointer;">${i}</br>`
 
           for(d of v){
             let img = d.images[0]
             catogerydiv.innerHTML += `
-            <div class="card" >
+            <div class="card hoverClass" >
                 <img src="${img}" alt="" >
-                <h2>${d.title}</h2>
+                <h2 >${d.title}</h2>
                 <p>${d.description}</p>
                 <h1>${d.price}</h1>
-                <button id="btn" class="btns" onclick = "submt('${i}')">view more</button>
+                <button id="btn" class="btns hoverClass" onclick = "submt('${i}')">view more</button>
             </div>`
            if(reload == 1)home.append(catogerydiv)
            console.log(d.price);
