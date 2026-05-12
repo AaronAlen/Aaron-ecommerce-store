@@ -89,3 +89,8 @@ app.listen(process.env.PORT,"0.0.0.0", ()=>console.log(`port running on ${proces
 // }
 
 // product()
+
+
+// git add .
+// git commit -m "fixed render paths"
+// git push

@@ -244,6 +244,11 @@
         // if(category){
         localStorage.setItem("category", category)
         // filter()
+         let filter = document.getElementById("filter")
+        let deleteImg = document.getElementById("deleteImg")
+        let filterImg = document.getElementById("filterImg")
+
+        if(filter.style.display == "block"){filter.style.display = "none";deleteImg.style.display = "none";filterImg.style.display = "block"}
         viewMore()
       }
 
