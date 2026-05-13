@@ -225,20 +225,46 @@
         let count = localStorage.getItem("count")
         let img = localStorage.getItem("img")
         let title = localStorage.getItem("title")
+        let type = localStorage.getItem("type")
         console.log(productId,count);
 
-        let res = await fetch(`/product/orderConfirmed`,{
-        // let res = await fetch(`http://${window.location.hostname}:3000/product/orderConfirmed`,{
-            method : "post",
-            headers : {
-                "content-type" : "application/json",
-                "authorization" : `bearer ${localStorage.getItem("token")}`
-            },
-            body : JSON.stringify({productId,count,img,title,address : {
-                name,email,phone,building,area,city,state,pincode
-            }})
-        })
-        if(res.ok)window.location.href ="confirmed.html"
+        let res
+
+        if(type == "single"){
+            res = await fetch(`/product/orderConfirmed`,{
+            // let res = await fetch(`http://${window.location.hostname}:3000/product/orderConfirmed`,{
+                method : "post",
+                headers : {
+                    "content-type" : "application/json",
+                    "authorization" : `bearer ${localStorage.getItem("token")}`
+                },
+                body : JSON.stringify({productId,count,img,title,address : {
+                    name,email,phone,building,area,city,state,pincode
+                }})
+            })
+        }
+
+        if(type == "multiple"){
+            res = await fetch(`/product/cartOrderConfirmed`,{
+            // let res = await fetch(`http://${window.location.hostname}:3000/product/orderConfirmed`,{
+                method : "post",
+                headers : {
+                    "content-type" : "application/json",
+                    "authorization" : `bearer ${localStorage.getItem("token")}`
+                },
+                body : JSON.stringify({address : {
+                    name,email,phone,building,area,city,state,pincode
+                }})
+            })
+        }
+
+        if(res.ok){
+            localStorage.removeItem("orderId")    
+            localStorage.removeItem("count")                    
+            localStorage.removeItem("img")                    
+            localStorage.removeItem("title")               
+            window.location.href ="confirmed.html"
+        }
     }
 
     async function goToCart(){

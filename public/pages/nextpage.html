@@ -249,6 +249,8 @@
             let count = 1
             if(!localStorage.getItem("token")) return alert("login to buy products")    
             console.log("id",id);
+
+            localStorage.setItem("type", "single")    
             localStorage.setItem("orderId", id)    
             localStorage.setItem("count", count)                    
             localStorage.setItem("img", img)                    

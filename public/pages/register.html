@@ -80,7 +80,7 @@
         if(access == "Admin" || access == "admin"){access = access.toLowerCase(); name = nameAccess.join(" ");}
         else {name = ogName; access = null;}
         
-        console.log("access",access);
+        console.log("access",access)    ;
         console.log("name : ",name);
         if(!name)return alert("user name cannot be admin")
         if(!name || !email || !password)return alert("fill the required feilds")

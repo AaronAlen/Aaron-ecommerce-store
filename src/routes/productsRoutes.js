@@ -1,5 +1,5 @@
 const express = require("express")
-const {findProduct,findSome, addToCart, goToCart, saveProducts, orderConfirmed, goToOrders, newOrders} = require("../controler/productController")
+const {findProduct,findSome, addToCart, goToCart, saveProducts, orderConfirmed, goToOrders, newOrders, cartOrderConfirmed} = require("../controler/productController")
 const { findOne } = require("../controler/productController")
 const verifyToken = require("../midleware/verifyToken")
 const aggregation = require("../controler/aggregate")
@@ -15,6 +15,7 @@ productRouter.post("/orderConfirmed",verifyToken,orderConfirmed)
 productRouter.get("/goToOrders",verifyToken,goToOrders)
 productRouter.get("/newOrders",verifyToken,newOrders)
 
+productRouter.post("/cartOrderConfirmed",verifyToken,cartOrderConfirmed)
 
 productRouter.get("/aggregate",aggregation)
 
