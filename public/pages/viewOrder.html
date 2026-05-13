@@ -11,19 +11,25 @@
             padding: 0%;
             background-color: transparent;
         }
+        #inside{
+            height: auto; display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 5%;
+        }
          #product, #subProduct, #cartTitle, #subCartTitle ,#checkoutDiv{
             width: 90%;
             display: flex;
             justify-content: space-around;
             align-items: center;
         }
-        #subProduct, #headingPrice{
-            width: 100px;
+         #headingPrice{
+            width: 40%;
         }
         #imgP{
             /* background-color: black; */
-            width: 100px;
-            height: 100px;
+            width: 300px;
+            height: 300px;
             border-radius:20px;
             box-shadow: 0px 0px 10px rgb(201, 200, 200);
         }
@@ -109,8 +115,8 @@
         }        
         #headingPrice{
             position: absolute !important;
-            top: 25% !important;
-            left: 45% !important;            
+            top: 15% !important;
+            left: 40% !important;            
         }
         #subProduct{
             position: absolute !important;
@@ -134,7 +140,7 @@
         }
         .dlt1{
             position: absolute;
-            top: 25% !important;
+            top: 6% !important;
             left: 90% !important;
             height: 25% !important;
             width: 20% !important;
@@ -165,12 +171,27 @@
     </style>
 </head>
 <body style="overflow-x: hidden;">
-    <div id="inside" style="height: auto; display: flex; justify-content: center; align-items: center; padding: 5%;">
+    <!-- <div id="inside">
         
             <div id="homeProductDiv">
-                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
+                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b></b></div></div>
+                <div id="productDiv">
+                    <div id="product" style="display: flex; margin-bottom: 2%;">
+                        <img id="imgP" class="hoverClass" src=${product.img} width="300px" alt="">
+                        <div id="headingPrice" "width: 150px">
+                            <h3 >product quantity : ${product.title}</h3>
+                            <h3 >address : </h3>
+                            <h4 >name : ${product.title}</h4>
+                            <h4 >${product.title}</h4>
+                            <h4 >${product.title}</h4>
+                            <h4 >${product.title}</h4>
+                            <h4 >${product.title}</h4>
+                            <h4 >${product.title}</h4>
 
-                <div id="productDiv" >
+                        </div>
+                        <!-- <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
+                        <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                 -->
+                    </div>                    
                 </div>  
 
                 <div id="total" style=" width: 90%; height: auto;">
@@ -179,18 +200,22 @@
         </div>
         
         
-    </div>
+    </div> -->
 </body>
 <script>
     
-    const div = document.getElementById("productDiv")
+    // const div = document.getElementById("productDiv")
+
+    console.log(localStorage.getItem("howManyOrders"));
+    let id = localStorage.getItem("howManyOrders")
+
     
     let response;
     
     
     async function oders(){
             if(!localStorage.getItem("token")) return alert("login to view orders")
-            const res = await fetch(`/product/newOrders`,{
+            const res = await fetch(`/product/viewOrders/${id}`,{
             // const res = await fetch(`http://${window.location.hostname}:3000/product/goToOrders`,{
                 method : "GET",
                 headers : {
@@ -206,44 +231,87 @@
         }
 
 
-        oders().then(()=>console.log(response.dat))
+        oders().then(()=>console.log(response))
 
 
 
 
-        function dlt(index){
-            // response.splice(index,1)
-            response[index].status = "canceled"
-            div.innerHTML =""
-            console.log(response[index].status);
-            display(response)
-        }
+
+    //     function dlt(index){
+    //         // response.splice(index,1)
+    //         response[index].status = "canceled"
+    //         div.innerHTML =""
+    //         console.log(response[index].status);
+    //         display(response)
+    //     }
 
         function display(products){
+            let body = document.body
+
             products.forEach((product, index) => {
-                console.log(product);
-                let color = product.quantity>1?"background-color :orange;":"background-color :green;"
-                div.innerHTML += `
-                <div id="product" style="display: flex; margin-bottom: 2%; " onclick="howManyOrders(${index})">
-                    <img id="imgP" class="hoverClass" src=${product.productDetails.images[0]} width="100px" alt="">
-                    <div id="headingPrice" "width: 150px">
-                        <h4 >${product.productDetails.title}</h4>
+                    body.innerHTML += `
+                        <div id="inside">
+                
+                    <div id="homeProductDiv">
+                        <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
+
+                        <div id="productDiv">
+                            <div id="product" style="display: flex; margin-bottom: 2%;">
+                                <img id="imgP" class="hoverClass" src=${product.image} width="300px" alt="">
+                                <div id="headingPrice" "width: 150px">
+                                    <h3 >product quantity : ${product.title}</h3>
+                                    <h3 >address : </h3>
+                                    <h4 >name : ${product.title}</h4>
+                                    <h4 >${product.title}</h4>
+                                    <h4 >${product.title}</h4>
+                                    <h4 >${product.title}</h4>
+                                    <h4 >${product.title}</h4>
+                                    <h4 >${product.title}</h4>
+
+                                </div>
+                                <!-- <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
+                                <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                 -->
+                            </div>                    
+
+                        </div>  
+
+                        <div id="total" style=" width: 90%; height: auto;">
+
                     </div>
-                    <button id="btn"  class="dlt1 hoverClass" style="${color}" >${product.quantity}</button>                
-                </div>`
+                </div>
+                
+                
+            </div>
+                    `
             })
-
         }
+//  let div = document.createElement("div")
+//  div.id = inside
+
+// let body = document.body
+//         for(let i = 0; i < 2; i++){
+//             body.innerHTML += `
+//                 <div id="inside">
+        
+//             <div id="homeProductDiv">
+//                 <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
+
+//                 <div id="productDiv">
+//                 </div>  
+
+//                 <div id="total" style=" width: 90%; height: auto;">
+
+//             </div>
+//         </div>
+        
+        
+//     </div>
+//             `
+//         }
 
 
 
-                    //<button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                
 
-    function howManyOrders(index){
-        localStorage.setItem("howManyOrders", response.data[index]._id)
-        console.log(response.data[index]._id);
-        window.location.href = "viewOrder.html"
-    }
 
 
 

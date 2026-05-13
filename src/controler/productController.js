@@ -124,7 +124,7 @@ const newOrders = async (req,res) => {
                 _id : {
                     $toObjectId: "$orders.productId"
                 },
-                quantity : {$sum : 1}
+                quantity : {$sum : "$orders.count"}
             }
         },     
         {
@@ -194,4 +194,51 @@ const cartOrderConfirmed = async (req,res)=> {
     res.json(productData)
 }
 
-module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders,cartOrderConfirmed}
+const viewOrders = async (req,res)=>{
+    console.log(req.params.id);
+    let data = await users.aggregate([
+        {
+            $unwind : "$orders"
+        },
+        // {
+        //     $group : {
+        //         _id : {
+        //             $toObjectId: "$orders.productId"
+        //         } 
+        //       }
+        // },
+        {
+            $match : {
+                "orders.productId" : req.params.id
+            }
+        },
+        {
+            $lookup : {
+                from : "ogproducts",
+                localField : "cart.productId",
+                foreignField : "_id",
+                as : "productDetails"
+            }
+        },
+        {
+            $unwind : "$productDetails"
+        },
+        {
+            $project : {
+                "id" : "$orders.productId",
+                "count" : "$orders.count",
+                "email" : "$email",
+                "adress" : "$orders.address",                
+                "productId" : "$cart.productId",
+                "image" : {
+                $arrayElemAt : ["$productDetails.images",0]
+                },
+                "title" : "$productDetails.title"
+            }
+        }
+    ])
+    console.log(data);
+    res.json({data})
+}
+
+module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders,cartOrderConfirmed,viewOrders}
