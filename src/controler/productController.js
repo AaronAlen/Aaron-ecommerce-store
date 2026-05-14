@@ -120,6 +120,11 @@ const newOrders = async (req,res) => {
             $unwind : "$orders"
         },
         {
+            $match : {
+                "orders.status" : "Orders"
+            }
+        },
+        {
             $group : {
                 _id : {
                     $toObjectId: "$orders.productId"
@@ -200,13 +205,6 @@ const viewOrders = async (req,res)=>{
         {
             $unwind : "$orders"
         },
-        // {
-        //     $group : {
-        //         _id : {
-        //             $toObjectId: "$orders.productId"
-        //         } 
-        //       }
-        // },
         {
             $match : {
                 "orders.productId" : req.params.id
@@ -228,8 +226,9 @@ const viewOrders = async (req,res)=>{
                 "id" : "$orders.productId",
                 "count" : "$orders.count",
                 "email" : "$email",
-                "adress" : "$orders.address",                
+                "address" : "$orders.address",                
                 "productId" : "$cart.productId",
+                "status" : "$orders.status",
                 "image" : {
                 $arrayElemAt : ["$productDetails.images",0]
                 },
@@ -241,4 +240,11 @@ const viewOrders = async (req,res)=>{
     res.json({data})
 }
 
-module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders,cartOrderConfirmed,viewOrders}
+const shipped = async(req,res)=>{
+    console.log(req.params.email);
+    console.log(req.params.id);
+    const data = await users.findOneAndUpdate({email :req.params.email,"orders.productId" : req.params.id},{$set: {"orders.$.status" : "shipped"}},{ returnDocument: "after"})
+    res.json("success")
+}
+
+module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders,cartOrderConfirmed,viewOrders,shipped}

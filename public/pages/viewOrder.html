@@ -73,7 +73,7 @@
         } */
          #btn{
             height: 60%;
-            width: 17%;
+            width: 50%;
          }
 
         .hoverClass{
@@ -93,74 +93,41 @@
 
     
     @media (max-width:420px){
-        /* #inside{
+        #inside{
             width: 100% !important;
             padding: 0% !important;
-            height: 80vh !important;
-        } */
+            height: auto !important;
+        }
         #homeProductDiv{
             margin-top: 5%;
             width: 95%;
         }
         #product{
-            position: relative;
-            height: 100px;
+            /* position: relative; */
+            /* height: 100px; */
             padding-bottom: 10% !important;
-
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+            /* justify-content: center; */
         }
         #imgP{
-            position: absolute !important;
+            /* position: absolute !important;
             top: 0% !important;
-            left: 0% !important;            
+            left: 0% !important;             */
         }        
         #headingPrice{
-            position: absolute !important;
+            /* position: absolute !important;
             top: 15% !important;
-            left: 40% !important;            
+            left: 40% !important;             */
         }
-        #subProduct{
-            position: absolute !important;
-            top: 20% !important;
-            left: 90% !important;            
-        }        
-        #totalPrice{
-            position: absolute !important;
-            top: 230% !important;
-            left: -530% !important;            
-        } 
-        .add{
-            margin-left: 30%;
-        }
-        .dlt{
-            position: absolute;
-            top: 45% !important;
-            left: 90% !important;
-            height: 25% !important;
-            width: 20% !important;
-        }
-        .dlt1{
-            position: absolute;
-            top: 6% !important;
-            left: 90% !important;
-            height: 25% !important;
-            width: 20% !important;
-        }
-        #totalCost{
-            padding-left: 10% !important;
-            text-align: start !important;
-        }
-        #checkoutDiv{
-            display: block !important;
-            text-align: center;
-            padding: 5%;
-            /* height: 7vh !important; */
-        }
-        #checkoutDiv button{
-            width: 30% !important;
-            height: 40% !important;
-            font-size: 15px;
-            gap: 2px !important;
-        }
+     
+
+        
+
+
+
         h4{
             font-size: 13px !important;
         }
@@ -189,8 +156,8 @@
                             <h4 >${product.title}</h4>
 
                         </div>
-                        <!-- <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
-                        <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                 -->
+                        <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
+                        <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                
                     </div>                    
                 </div>  
 
@@ -245,10 +212,12 @@
     //         display(response)
     //     }
 
+    let body = document.body
+
         function display(products){
-            let body = document.body
 
             products.forEach((product, index) => {
+                console.log(product);
                     body.innerHTML += `
                         <div id="inside">
                 
@@ -259,18 +228,19 @@
                             <div id="product" style="display: flex; margin-bottom: 2%;">
                                 <img id="imgP" class="hoverClass" src=${product.image} width="300px" alt="">
                                 <div id="headingPrice" "width: 150px">
-                                    <h3 >product quantity : ${product.title}</h3>
+                                    <h3 >product quantity : ${product.count}</h3>
                                     <h3 >address : </h3>
-                                    <h4 >name : ${product.title}</h4>
-                                    <h4 >${product.title}</h4>
-                                    <h4 >${product.title}</h4>
-                                    <h4 >${product.title}</h4>
-                                    <h4 >${product.title}</h4>
-                                    <h4 >${product.title}</h4>
+                                    <h4 >name : ${product.address.name}</h4>
+                                    <h4 >phone : ${product.address.phone}</h4>
+                                    <h4 >building : ${product.address.building}</h4>
+                                    <h4 >area : ${product.address.area}</h4>
+                                    <h4 >city : ${product.address.city}</h4>
+                                    <h4 >state : ${product.address.state}</h4>
+                                    <h4 >pincode : ${product.address.pincode}</h4>
+                                    <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
+                                    <button id="btn" class="hoverClass" onclick="shipped('${product.id}','${product.email}',${index})">shipped ?</button>
 
                                 </div>
-                                <!-- <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
-                                <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                 -->
                             </div>                    
 
                         </div>  
@@ -283,35 +253,26 @@
                 
             </div>
                     `
+                    // console.log(product.id,product.email,index);
             })
         }
-//  let div = document.createElement("div")
-//  div.id = inside
 
-// let body = document.body
-//         for(let i = 0; i < 2; i++){
-//             body.innerHTML += `
-//                 <div id="inside">
-        
-//             <div id="homeProductDiv">
-//                 <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
-
-//                 <div id="productDiv">
-//                 </div>  
-
-//                 <div id="total" style=" width: 90%; height: auto;">
-
-//             </div>
-//         </div>
-        
-        
-//     </div>
-//             `
-//         }
-
-
-
-
+        async function shipped(id,email,index){
+            console.log(id,email,index);
+            let res = await fetch(`/product/shipped/${id}/${email}`,{
+                method : "post",
+                headers : {
+                    "content-type" : "application/json",
+                    "authorization" : `bearer ${localStorage.getItem("token")}`
+                }
+            })
+            if(res.ok){
+                response.data[index].status = "Shipped"
+                alert("Order shipped")
+                body.innerHTML = ""
+                display(response.data)
+            }
+        }
 
 
 
