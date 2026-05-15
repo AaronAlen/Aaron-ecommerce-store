@@ -224,7 +224,6 @@
             if(!localStorage.getItem("token")) return alert("login to add products to cart")
             console.log("id",id);
             const res = await fetch(`/product/addToCart/${id}`,{
-            // const res = await fetch(`http://${window.location.hostname}:3000/product/addToCart/${id}`,{
                 method : "post",
                 headers : {
                     "content-type" : "application/json",

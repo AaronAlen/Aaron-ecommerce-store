@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../style/index.css">
+    <link rel="stylesheet" href="./index.css">
     <style>
         *{
             margin: 0%;
@@ -84,14 +84,15 @@
         .hoverClassb:hover{
           transform: scale(1.3);
         }
+        .l{
+            top: 2%;
+        }
 
     
     @media (max-width:420px){
-        /* #inside{
-            width: 100% !important;
-            padding: 0% !important;
-            height: 80vh !important;
-        } */
+        #inside{
+            padding-top: 20% !important;
+        }
         #homeProductDiv{
             margin-top: 5%;
             width: 95%;
@@ -159,16 +160,43 @@
             font-size: 13px !important;
         }
 
+        #btnO{
+          top: 1% !important;
+          left: 50% !important;
+        }
+        #btnc{
+          top: 1% !important;
+          left: 60% !important;
+        }
+        #btnl{
+          top: 1% !important;
+          left: 70% !important;
+        }
+        #btnd{
+          top: 1% !important;
+          left: 80% !important;
+        }
+        #btne{
+          top: 1% !important;
+          left: 90% !important;
+        }
 
     }
 
     </style>
 </head>
 <body style="overflow-x: hidden;">
+    <img src="./images/checklist.png"  width="30px" id="btnO" onclick="goTo(1)" class="hoverClassb l" style="background-color: transparent; position: fixed; left: 75%; z-index: 3;"></img>
+    <img src="./images/cruise.png"  width="30px" id="btnc" onclick="goTo(2)" class="hoverClassb l" style="background-color: transparent; position: fixed; left: 80%;"></img>
+    <img src="./images/delivery-bike.png"  width="30px" id="btnl" onclick="goTo(3)" class="hoverClassb l" style="background-color: transparent; position: fixed; left: 85%; z-index: 3;"></img>
+    <img src="./images/delivered.png"  width="30px" id="btnd" onclick="goTo(4)" class="hoverClassb l" style="background-color: transparent; position: fixed; left: 90%; z-index: 3;"></img>
+    <img src="./images/cencel.png"  width="30px" id="btne" onclick="goTo(5)" class="hoverClassb l" style="background-color: transparent; position: fixed; left: 95%; z-index: 3;"></img>
+
+
     <div id="inside" style="height: auto; display: flex; justify-content: center; align-items: center; padding: 5%;">
         
             <div id="homeProductDiv">
-                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
+                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Out for delivery</b><img src="./images/delivery-bike.png" width="30px" alt=""></div></div>
 
                 <div id="productDiv" >
                 </div>  
@@ -189,8 +217,9 @@
     
     
     async function oders(){
+        let status = "Out for Delivery"
             if(!localStorage.getItem("token")) return alert("login to view orders")
-            const res = await fetch(`/product/newOrders`,{
+            const res = await fetch(`/product/newOrders/${status}`,{
             // const res = await fetch(`http://${window.location.hostname}:3000/product/goToOrders`,{
                 method : "GET",
                 headers : {
@@ -241,11 +270,19 @@
 
     function howManyOrders(index){
         localStorage.setItem("howManyOrders", response.data[index]._id)
+        localStorage.setItem("status", "Out for Delivery")
         console.log(response.data[index]._id);
-        window.location.href = "viewOrder.html"
+        window.location.href = "AdminViewOrder.html"
     }
 
+    function goTo(n){
+        if(n==1)window.location.href = "adminNewOrders.html"
+        else if(n==2)window.location.href = "adminShipped.html"
+        else if(n==3)window.location.href = "adminOutDeliver.html"
+        else if(n==4)window.location.href = "admindelivered.html"
+        else if(n==5)window.location.href = "admincancelled.html"
+    }
 
-
+console.log(window.location.href)
 </script>
 </html>

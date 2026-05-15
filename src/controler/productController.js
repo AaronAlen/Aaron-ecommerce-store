@@ -102,6 +102,7 @@ const goToOrders = async (req,res)=>{
         {
             $project : {
                 _id : 0,
+                "productId" : "$orders._id",
                 "count" : "$orders.count",
                 "img" : "$orders.img",
                 "status" : "$orders.status",
@@ -111,46 +112,9 @@ const goToOrders = async (req,res)=>{
 
     ])
     console.log(data);
-    res.json(data)
+    res.json({data, user : req.user})
 }
 
-const newOrders = async (req,res) => {
-    const data = await users.aggregate([
-        {
-            $unwind : "$orders"
-        },
-        {
-            $match : {
-                "orders.status" : "Orders"
-            }
-        },
-        {
-            $group : {
-                _id : {
-                    $toObjectId: "$orders.productId"
-                },
-                quantity : {$sum : "$orders.count"}
-            }
-        },     
-        {
-            $lookup : {
-                from : "ogproducts",
-                localField : "_id",
-                foreignField : "_id",
-                as : "productDetails"
-            }
-        },
-        {
-            $unwind : "$productDetails"
-        },
-        // {
-        //     $sort : {
-        //         "$orders.createdAt" : 1
-        //     }
-        // }
-    ])
-    res.json({data})
-}
 
 const cartOrderConfirmed = async (req,res)=> {
     console.log("hi");
@@ -177,74 +141,127 @@ const cartOrderConfirmed = async (req,res)=> {
             $unwind : "$productDetails"
         },
         // {
-        //     $unwind : "$productDetails.images"
-        // },
-        {
-            $project : {
-                "productId" : "$cart.productId",
-                "count" : "$cart.count",
-                "image" : {
-                $arrayElemAt : ["$productDetails.images",0]
-                },
-                "title" : "$productDetails.title"
+            //     $unwind : "$productDetails.images"
+            // },
+            {
+                $project : {
+                    "productId" : "$cart.productId",
+                    "count" : "$cart.count",
+                    "image" : {
+                        $arrayElemAt : ["$productDetails.images",0]
+                    },
+                    "title" : "$productDetails.title"
+                }
             }
-        }
-    ])
-    console.log("product data" ,productData);
-    console.log(req.body);
-    productData.forEach(product=>{
-    user.orders.push({productId : product.productId,count : product.count, img : product.image, title : product.title, address : req.body.address})
-    })
-    await user.save()    
-    res.json(productData)
-}
+        ])
+        console.log("product data" ,productData);
+        console.log(req.body);
+        productData.forEach(product=>{
+            user.orders.push({productId : product.productId,count : product.count, img : product.image, title : product.title, address : req.body.address})
+        })
+        await user.save()    
+        res.json(productData)
+    }
+
+
+    
+    const newOrders = async (req,res) => {
+        console.log(req.params.status);
+        const data = await users.aggregate([
+            {
+                $unwind : "$orders"
+            },
+            {
+                $match : {
+                    "orders.status" : req.params.status
+                }
+            },
+            {
+                $group : {
+                    _id : {
+                        $toObjectId: "$orders.productId"
+                    },
+                    quantity : {$sum : "$orders.count"}
+                }
+            },     
+            {
+                $lookup : {
+                    from : "ogproducts",
+                    localField : "_id",
+                    foreignField : "_id",
+                    as : "productDetails"
+                }
+            },
+            {
+                $unwind : "$productDetails"
+            },
+    
+        ])
+        res.json({data})
+    }
+
 
 const viewOrders = async (req,res)=>{
     console.log(req.params.id);
+    console.log(req.params.status);
     let data = await users.aggregate([
         {
             $unwind : "$orders"
         },
         {
             $match : {
-                "orders.productId" : req.params.id
+                "orders.productId" : req.params.id,
+                "orders.status" : req.params.status
             }
         },
-        {
-            $lookup : {
-                from : "ogproducts",
-                localField : "cart.productId",
-                foreignField : "_id",
-                as : "productDetails"
-            }
-        },
-        {
-            $unwind : "$productDetails"
-        },
+        // {
+        //     $lookup : {
+        //         from : "ogproducts",
+        //         localField : {
+        //             $toObjectId : "orders.productId"
+        //         },
+        //         foreignField : "_id",
+        //         as : "productDetails"
+        //     }
+        // },
+        // {
+        //     $unwind : "$productDetails"
+        // },
         {
             $project : {
-                "id" : "$orders.productId",
+                "id" : "$orders._id",
                 "count" : "$orders.count",
+                "name" : "$name",
                 "email" : "$email",
                 "address" : "$orders.address",                
-                "productId" : "$cart.productId",
                 "status" : "$orders.status",
-                "image" : {
-                $arrayElemAt : ["$productDetails.images",0]
-                },
-                "title" : "$productDetails.title"
+                "image" : "$orders.img",
+                "title" : "$orders.title"
             }
         }
+
     ])
     console.log(data);
     res.json({data})
 }
 
-const shipped = async(req,res)=>{
+const statusChange = async(req,res)=>{
+    console.log("hi there");
     console.log(req.params.email);
     console.log(req.params.id);
-    const data = await users.findOneAndUpdate({email :req.params.email,"orders.productId" : req.params.id},{$set: {"orders.$.status" : "shipped"}},{ returnDocument: "after"})
+    console.log(req.params.change);
+    const data = await users.findOneAndUpdate({email :req.params.email,"orders._id" : req.params.id},{$set: {"orders.$.status" : req.params.change}},{ returnDocument: "after"})
     res.json("success")
 }
 
-module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders,cartOrderConfirmed,viewOrders,shipped}
+const userOrderCancel = async(req,res)=>{
+    console.log("hi here");
+    console.log(req.params.email);
+    console.log(req.params.id);
+    console.log(req.params.change);
+    const data = await users.findOneAndUpdate({email :req.params.email,"orders._id" : req.params.id},{$set: {"orders.$.status" : req.params.change}},{ returnDocument: "after"})
+    res.json("success")
+}
+
+
+    module.exports = {findProduct,findSome,findOne,addToCart,goToCart,saveProducts,orderConfirmed,goToOrders,newOrders,cartOrderConfirmed,viewOrders,statusChange, userOrderCancel}

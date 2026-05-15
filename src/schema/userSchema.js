@@ -27,7 +27,7 @@ const orders = new mongoose.Schema({
     title : String,
     status : {
         type : String,
-        enum : ["Ordered", "Packed", "Shipped", "Out for Delivery", "delivered", "Return"],
+        enum : ["Ordered", "Packed", "Shipped", "Out for Delivery", "Delivered","Cancelled", "Return","closed orders"],
         default : "Ordered"
     },
     address : address

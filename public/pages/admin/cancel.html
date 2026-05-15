@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../style/index.css">
+    <link rel="stylesheet" href="./index.css">
     <style>
         *{
             margin: 0%;
@@ -23,6 +23,10 @@
             justify-content: space-around;
             align-items: center;
         }
+        #product {
+            margin-bottom: 10% !important;
+        }
+
          #headingPrice{
             width: 40%;
         }
@@ -75,6 +79,9 @@
             height: 60%;
             width: 50%;
          }
+         .dlt1{
+            margin-top: 10%;
+         }
 
         .hoverClass{
           transition: 0.2s ease;
@@ -101,29 +108,44 @@
         #homeProductDiv{
             margin-top: 5%;
             width: 95%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         #product{
             /* position: relative; */
             /* height: 100px; */
             padding-bottom: 10% !important;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            gap: 50px;
+            position: relative;
+            margin-bottom: 30% !important;
+            /* gap: 50px; */
             /* justify-content: center; */
         }
         #imgP{
-            /* position: absolute !important;
-            top: 0% !important;
-            left: 0% !important;             */
+            width: 50%;
+            height: auto;
         }        
-        #headingPrice{
-            /* position: absolute !important;
-            top: 15% !important;
-            left: 40% !important;             */
-        }
-     
 
+     
+        #btn{
+            font-size: 18px;
+            width: 35%;
+            height: 24%;
+            position: absolute;
+            left: 35%;
+            top: 80%;
+        }
+        .dlt{
+            font-size: 18px !important;
+            width: 35% !important;
+            height: 24% !important;
+            position: absolute !important;
+            left: 60% !important;
+            top: 95% !important;
+        }
         
 
 
@@ -138,43 +160,45 @@
     </style>
 </head>
 <body style="overflow-x: hidden;">
-    <!-- <div id="inside">
-        
-            <div id="homeProductDiv">
-                <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b></b></div></div>
-                <div id="productDiv">
-                    <div id="product" style="display: flex; margin-bottom: 2%;">
-                        <img id="imgP" class="hoverClass" src=${product.img} width="300px" alt="">
-                        <div id="headingPrice" "width: 150px">
-                            <h3 >product quantity : ${product.title}</h3>
-                            <h3 >address : </h3>
-                            <h4 >name : ${product.title}</h4>
-                            <h4 >${product.title}</h4>
-                            <h4 >${product.title}</h4>
-                            <h4 >${product.title}</h4>
-                            <h4 >${product.title}</h4>
-                            <h4 >${product.title}</h4>
+                            <div id="inside">
+                
+                    <div id="homeProductDiv">
+                        <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>${localStorage.getItem("status")}</b><img src="${imageScr}" width="30px" alt=""></div></div>
 
-                        </div>
-                        <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
-                        <button id="btn" class="dlt hoverClass" onclick = "dlt(${index})" style="width: 13%;">cancel</button>                
-                    </div>                    
-                </div>  
+                        <div id="productDiv">                   
 
-                <div id="total" style=" width: 90%; height: auto;">
+                        </div>  
 
+                        <div id="total" style=" width: 90%; height: auto;">
+
+                    </div>
+                </div>
+                
+                
             </div>
-        </div>
-        
-        
-    </div> -->
+
 </body>
 <script>
-    
+    let change = ""
+    let imageScr
+    if(localStorage.getItem("status") == "Ordered") {change = "Shipped"; imageScr = "./images/checklist.png"}
+    if(localStorage.getItem("status") == "Shipped") {change = "Out for Delivery"; imageScr = "./images/cruise.png"}
+    if(localStorage.getItem("status") == "Out for Delivery") {change = "Delivered"; imageScr = "./images/delivery-bike.png"}
+
+    imageScr = "./images/cencel.png"
+
+
+    let subCartTitle = document.getElementById("subCartTitle")
+    subCartTitle.innerHTML = `<b>${localStorage.getItem("status")}</b><img src="${imageScr}" width="30px" alt="">`
+
+    // if(localStorage.getItem("status") == "delivered") change = "Shipped"
+
     // const div = document.getElementById("productDiv")
 
     console.log(localStorage.getItem("howManyOrders"));
     let id = localStorage.getItem("howManyOrders")
+    let status = localStorage.getItem("status")
+    
 
     
     let response;
@@ -182,7 +206,7 @@
     
     async function oders(){
             if(!localStorage.getItem("token")) return alert("login to view orders")
-            const res = await fetch(`/product/viewOrders/${id}`,{
+            const res = await fetch(`/product/viewOrders/${id}/${status}`,{
             // const res = await fetch(`http://${window.location.hostname}:3000/product/goToOrders`,{
                 method : "GET",
                 headers : {
@@ -198,39 +222,21 @@
         }
 
 
-        oders().then(()=>console.log(response))
+        oders()
 
 
 
-
-
-    //     function dlt(index){
-    //         // response.splice(index,1)
-    //         response[index].status = "canceled"
-    //         div.innerHTML =""
-    //         console.log(response[index].status);
-    //         display(response)
-    //     }
-
-    let body = document.body
+    let productDiv = document.getElementById("productDiv")
 
         function display(products){
-
             products.forEach((product, index) => {
-                console.log(product);
-                    body.innerHTML += `
-                        <div id="inside">
-                
-                    <div id="homeProductDiv">
-                        <div id="cartTitle" style="height: 20%; margin-top: 5%; justify-content: center;"><div id="subCartTitle" style="width: 15%;"><b>Orders</b><img src="../images/regulatory-compliance.png" width="30px" alt=""></div></div>
-
-                        <div id="productDiv">
+                    productDiv.innerHTML += `
                             <div id="product" style="display: flex; margin-bottom: 2%;">
                                 <img id="imgP" class="hoverClass" src=${product.image} width="300px" alt="">
                                 <div id="headingPrice" "width: 150px">
                                     <h3 >product quantity : ${product.count}</h3>
                                     <h3 >address : </h3>
-                                    <h4 >name : ${product.address.name}</h4>
+                                    <h4 >name : ${product.name}</h4>
                                     <h4 >phone : ${product.address.phone}</h4>
                                     <h4 >building : ${product.address.building}</h4>
                                     <h4 >area : ${product.address.area}</h4>
@@ -238,28 +244,18 @@
                                     <h4 >state : ${product.address.state}</h4>
                                     <h4 >pincode : ${product.address.pincode}</h4>
                                     <button id="btn"  class="dlt1 hoverClass"  style="background-color: green;" >${product.status}</button>                
-                                    <button id="btn" class="hoverClass" onclick="shipped('${product.id}','${product.email}',${index})">shipped ?</button>
 
                                 </div>
                             </div>                    
 
-                        </div>  
-
-                        <div id="total" style=" width: 90%; height: auto;">
-
-                    </div>
-                </div>
-                
-                
-            </div>
                     `
                     // console.log(product.id,product.email,index);
             })
         }
 
-        async function shipped(id,email,index){
-            console.log(id,email,index);
-            let res = await fetch(`/product/shipped/${id}/${email}`,{
+        async function statusChanger(id,email,index){
+
+            let res = await fetch(`/product/statusChange/${id}/${email}/${change}`,{
                 method : "post",
                 headers : {
                     "content-type" : "application/json",
@@ -267,10 +263,11 @@
                 }
             })
             if(res.ok){
-                response.data[index].status = "Shipped"
-                alert("Order shipped")
-                body.innerHTML = ""
+                response.data[index].status = change
+                productDiv.innerHTML = ""
                 display(response.data)
+                alert(`Order moved to ${change}`)
+
             }
         }
 

@@ -85,7 +85,7 @@
             localStorage.setItem("token" , data.token)
             console.log(localStorage.getItem("token"));
             alert(data.message)
-            if(data.access == "admin")window.location.href = "newOrders.html"
+            if(data.access == "admin")window.location.href = "./admin/adminNewOrders.html"
             else if(res.status === 200){console.log("hi"); window.location.href = "../index.html" }
         }
       }
@@ -99,6 +99,7 @@
         if(where == 1)window.location.href = "register.html"
         else window.location.href = "../index.html"
     }
+    console.log(window.location.href)
 
 </script>
 </html>
